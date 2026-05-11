@@ -1,6 +1,6 @@
-# Microsphere Hibernate ORM
+# Microsphere Hibernate
 
-> Microsphere Projects for [Hibernate ORM](https://hibernate.org/orm/)
+> Microsphere Projects for [Hibernate](https://hibernate.org/)
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/microsphere-projects/microsphere-hibernate)
 [![Maven Build](https://github.com/microsphere-projects/microsphere-hibernate/actions/workflows/maven-build.yml/badge.svg)](https://github.com/microsphere-projects/microsphere-hibernate/actions/workflows/maven-build.yml)
@@ -19,7 +19,7 @@
 
 ## Getting Started
 
-The easiest way to get started is by adding the Microsphere Hibernate ORM BOM (Bill of Materials) to your project's
+The easiest way to get started is by adding the Microsphere Hibernate BOM (Bill of Materials) to your project's
 pom.xml:
 
 ```xml

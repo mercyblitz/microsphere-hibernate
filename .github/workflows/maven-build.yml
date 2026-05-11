@@ -25,6 +25,12 @@ jobs:
         java: [ '17' , '21' , '25' ]
         maven-profile-spring-cloud: [ 'spring-cloud-2022' , 'spring-cloud-2023' , 'spring-cloud-2024' ,
                                       'spring-cloud-2025' ]
+        maven-hibernate: [ 'hibernate-7.3' , 'hibernate-7.2' , 'hibernate-7.1' , 'hibernate-7.0' ,
+                           'hibernate-6.6' , 'hibernate-6.5' , 'hibernate-6.4' , 'hibernate-6.3' ,
+                           'hibernate-6.2'
+        ]
+    ]
+
     steps:
       - name: Checkout Source
         uses: actions/checkout@v5
