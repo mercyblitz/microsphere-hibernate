@@ -19,17 +19,19 @@
     <description>Microsphere Hibernate Parent</description>
 
     <properties>
-        <hibernate.versinon>7.3.4.Final</hibernate.versinon>
         <microsphere-spring-cloud.version>0.2.11</microsphere-spring-cloud.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
 
+            <!-- Hibernate Dependencies -->
             <dependency>
-                <groupId>org.hibernate</groupId>
+                <groupId>org.hibernate.orm</groupId>
                 <artifactId>hibernate-platform</artifactId>
-                <version>${hibernate.versinon}</version>
+                <version>${hibernate.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <!-- Microsphere Spring Cloud Dependencies -->
