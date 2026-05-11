@@ -23,6 +23,7 @@ import static io.microsphere.annotation.ConfigurationProperty.SYSTEM_PROPERTIES_
 import static io.microsphere.constants.PropertyConstants.ENABLED_PROPERTY_NAME;
 import static io.microsphere.constants.PropertyConstants.MICROSPHERE_PROPERTY_NAME_PREFIX;
 import static io.microsphere.constants.SymbolConstants.DOT;
+import static java.lang.Boolean.parseBoolean;
 
 /**
  * The interface to declare the property constants of Microsphere Hibernate
@@ -33,17 +34,29 @@ import static io.microsphere.constants.SymbolConstants.DOT;
 public interface PropertyConstants {
 
     /**
-     * The property name prefix of Microsphere Hibernate
+     * The property name prefix of Microsphere Hibernate : "microsphere.hibernate."
      */
     String MICROSPHERE_HIBERNATE_PROPERTY_NAME_PREFIX = MICROSPHERE_PROPERTY_NAME_PREFIX + "hibernate" + DOT;
+
+    /**
+     * The default value of enabled property of Microsphere Hibernate : "true"
+     */
+    String DEFAULT_MICROSPHERE_HIBERNATE_ENABLED_PROPERTY_VALUE = "true";
+
+    /**
+     * The default value of enabled property of Microsphere Hibernate : true
+     */
+    boolean DEFAULT_MICROSPHERE_HIBERNATE_ENABLED = parseBoolean(DEFAULT_MICROSPHERE_HIBERNATE_ENABLED_PROPERTY_VALUE);
 
     /**
      * The enabled property name of Microsphere Hibernate
      */
     @ConfigurationProperty(
             type = boolean.class,
-            defaultValue = "true",
+            defaultValue = DEFAULT_MICROSPHERE_HIBERNATE_ENABLED_PROPERTY_VALUE,
             source = SYSTEM_PROPERTIES_SOURCE
     )
     String MICROSPHERE_HIBERNATE_ENABLED_PROPERTY_NAME = MICROSPHERE_HIBERNATE_PROPERTY_NAME_PREFIX + ENABLED_PROPERTY_NAME;
+
+
 }
