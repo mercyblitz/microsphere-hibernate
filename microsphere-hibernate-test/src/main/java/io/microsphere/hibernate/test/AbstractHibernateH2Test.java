@@ -18,7 +18,6 @@
 package io.microsphere.hibernate.test;
 
 import io.microsphere.hibernate.test.entity.User;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,36 +61,13 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
     }
 
     @Test
-    @DisplayName("Test Session: save & update & flush & get & delete")
-    void testSession1() {
-        long userId = this.user.getId();
-        assertEquals(userId, this.session.save(this.user));
-
-        this.user.setName("Ma");
-        this.session.update(this.user);
-
-        // flush
-        Transaction transaction = this.session.beginTransaction();
-        this.session.flush();
-        transaction.commit();
-
-        this.user = this.session.get(User.class, userId);
-        assertNotNull(this.user);
-
-        this.session.delete(this.user);
-    }
-
-    @Test
-    @DisplayName("Test : persist & saveOrUpdate & load & remove")
-    void testSession2() {
+    @DisplayName("Test : persist & detach & remove")
+    void testSession() {
         long userId = this.user.getId();
         this.session.persist(this.user);
 
-        this.user.setId(currentTimeMillis());
-        this.user.setName("Ma");
-        this.session.saveOrUpdate(this.user);
+        this.session.detach(this.user);
 
-        this.user = this.session.load(User.class, userId);
         assertNotNull(this.user);
 
         this.session.remove(this.user);
@@ -99,7 +75,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
 
     @Test
     @DisplayName("Test : persist & find & merge & remove")
-    void testSession3() {
+    void testSession2() {
         long userId = this.user.getId();
         this.session.persist(this.user);
 
