@@ -29,7 +29,6 @@ jobs:
                            'hibernate-6.6' , 'hibernate-6.5' , 'hibernate-6.4' , 'hibernate-6.3' ,
                            'hibernate-6.2'
         ]
-    ]
 
     steps:
       - name: Checkout Source
