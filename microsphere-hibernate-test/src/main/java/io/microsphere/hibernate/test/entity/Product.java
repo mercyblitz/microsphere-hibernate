@@ -20,7 +20,6 @@ package io.microsphere.hibernate.test.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -29,17 +28,20 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Table(name = "t_product")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     private String productName;
 
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany(mappedBy = "products", fetch = LAZY)
     private Set<Order> orders = new HashSet<>();
 
     public Long getId() {

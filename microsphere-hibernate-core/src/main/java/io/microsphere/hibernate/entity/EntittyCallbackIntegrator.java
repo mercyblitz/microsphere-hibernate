@@ -27,7 +27,7 @@ import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 
 import static org.hibernate.event.spi.EventType.DELETE;
 import static org.hibernate.event.spi.EventType.EVICT;
-import static org.hibernate.event.spi.EventType.FLUSH;
+import static org.hibernate.event.spi.EventType.FLUSH_ENTITY;
 import static org.hibernate.event.spi.EventType.LOAD;
 import static org.hibernate.event.spi.EventType.LOCK;
 import static org.hibernate.event.spi.EventType.MERGE;
@@ -81,7 +81,7 @@ public class EntittyCallbackIntegrator implements Integrator {
 
         eventListenerRegistry.appendListeners(REPLICATE, listener);
 
-        eventListenerRegistry.appendListeners(FLUSH, listener);
+        eventListenerRegistry.appendListeners(FLUSH_ENTITY, listener);
 
         eventListenerRegistry.appendListeners(EVICT, listener);
 

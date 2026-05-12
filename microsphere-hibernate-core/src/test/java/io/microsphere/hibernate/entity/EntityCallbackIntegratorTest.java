@@ -28,6 +28,6 @@ import io.microsphere.hibernate.test.AbstractHibernateH2Test;
  * @see AbstractHibernateH2Test
  * @since 1.0.0
  */
-class EntittyCallbackIntegratorTest extends AbstractHibernateH2Test {
+class EntityCallbackIntegratorTest extends AbstractHibernateH2Test {
 
 }
