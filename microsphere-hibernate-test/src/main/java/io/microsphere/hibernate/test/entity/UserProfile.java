@@ -14,41 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.microsphere.hibernate.test.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "t_user")
-public class User {
+@Table(name = "t_user_profile")
+public class UserProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String idCard;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserProfile profile;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Order> orders = new ArrayList<>();
-
-    public void addOrder(Order order) {
-        orders.add(order);
-        order.setUser(this);
-    }
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -58,39 +49,31 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getIdCard() {
+        return idCard;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 
-    public UserProfile getProfile() {
-        return profile;
+    public User getUser() {
+        return user;
     }
 
-    public void setProfile(UserProfile profile) {
-        this.profile = profile;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof User user1)) return false;
-        return Objects.equals(id, user1.id)
-                && Objects.equals(name, user1.name);
+        if (!(o instanceof UserProfile that)) return false;
+        return Objects.equals(id, that.id)
+                && Objects.equals(idCard, that.idCard);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, idCard);
     }
 }

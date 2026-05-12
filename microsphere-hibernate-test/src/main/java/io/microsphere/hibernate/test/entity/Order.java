@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.microsphere.hibernate.test.entity;
 
 import jakarta.persistence.CascadeType;
@@ -21,34 +22,37 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name = "t_user")
-public class User {
+@Table(name = "t_order")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String orderNo;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserProfile profile;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Order> orders = new ArrayList<>();
-
-    public void addOrder(Order order) {
-        orders.add(order);
-        order.setUser(this);
-    }
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "t_order_product",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<Product> products = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -58,39 +62,41 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getOrderNo() {
+        return orderNo;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
-    public UserProfile getProfile() {
-        return profile;
+    public User getUser() {
+        return user;
     }
 
-    public void setProfile(UserProfile profile) {
-        this.profile = profile;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public Set<Product> getProducts() {
+        return products;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof User user1)) return false;
-        return Objects.equals(id, user1.id)
-                && Objects.equals(name, user1.name);
+    public final boolean equals(Object o) {
+        if (!(o instanceof Order order)) return false;
+
+        return Objects.equals(id, order.id) && Objects.equals(orderNo, order.orderNo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(orderNo);
+        return result;
     }
 }
