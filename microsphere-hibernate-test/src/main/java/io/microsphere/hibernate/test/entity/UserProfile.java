@@ -19,7 +19,6 @@ package io.microsphere.hibernate.test.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -27,12 +26,14 @@ import jakarta.persistence.Table;
 
 import java.util.Objects;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Table(name = "t_user_profile")
 public class UserProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     private String idCard;

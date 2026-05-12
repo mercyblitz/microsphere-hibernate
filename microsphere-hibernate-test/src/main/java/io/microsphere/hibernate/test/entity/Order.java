@@ -17,10 +17,8 @@
 
 package io.microsphere.hibernate.test.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -32,12 +30,16 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Table(name = "t_order")
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     private String orderNo;
@@ -46,7 +48,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {PERSIST, MERGE})
     @JoinTable(
             name = "t_order_product",
             joinColumns = @JoinColumn(name = "order_id"),

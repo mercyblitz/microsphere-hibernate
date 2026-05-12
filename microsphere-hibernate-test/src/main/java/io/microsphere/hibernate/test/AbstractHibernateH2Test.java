@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static jakarta.persistence.CacheStoreMode.REFRESH;
 import static org.hibernate.LockMode.READ;
@@ -107,6 +108,18 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
                 session.persist(user);
                 User user1 = session.get(User.class, user.getId());
                 assertEquals(user, user1);
+
+                List<Order> orders = user1.getOrders();
+                assertFalse(orders.isEmpty());
+                orders.forEach(order -> {
+                    Set<Product> products = order.getProducts();
+                    assertFalse(products.isEmpty());
+                });
+
+                UserProfile profile = user1.getProfile();
+                assertEquals(profile, user.getProfile());
+
+
             });
         }
 

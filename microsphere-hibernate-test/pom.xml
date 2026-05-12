@@ -34,6 +34,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Microsphere Java Test -->
+        <dependency>
+            <groupId>io.github.microsphere-projects</groupId>
+            <artifactId>microsphere-java-test</artifactId>
+        </dependency>
+
         <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
