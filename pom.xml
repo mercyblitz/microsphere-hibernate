@@ -60,6 +60,7 @@
         <module>microsphere-hibernate-parent</module>
         <module>microsphere-hibernate-dependencies</module>
         <module>microsphere-hibernate-core</module>
+        <module>microsphere-hibernate-test</module>
     </modules>
 
 </project>
