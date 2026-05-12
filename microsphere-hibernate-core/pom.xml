@@ -60,6 +60,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Microsphere Hibernate Test -->
+        <dependency>
+            <groupId>io.github.microsphere-projects</groupId>
+            <artifactId>microsphere-hibernate-test</artifactId>
+            <version>${revision}</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- H2 -->
         <dependency>
             <groupId>com.h2database</groupId>

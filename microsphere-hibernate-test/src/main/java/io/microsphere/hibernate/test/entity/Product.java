@@ -14,41 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.microsphere.hibernate.test.entity;
 
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name = "t_user")
-public class User {
+@Table(name = "t_product")
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String productName;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserProfile profile;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Order> orders = new ArrayList<>();
-
-    public void addOrder(Order order) {
-        orders.add(order);
-        order.setUser(this);
-    }
+    @ManyToMany(mappedBy = "products")
+    private Set<Order> orders = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -58,39 +50,34 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public UserProfile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(UserProfile profile) {
-        this.profile = profile;
-    }
-
-    public List<Order> getOrders() {
+    public Set<Order> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<Order> orders) {
+    public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof User user1)) return false;
-        return Objects.equals(id, user1.id)
-                && Objects.equals(name, user1.name);
+    public final boolean equals(Object o) {
+        if (!(o instanceof Product product)) return false;
+
+        return Objects.equals(id, product.id)
+                && Objects.equals(productName, product.productName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(productName);
+        return result;
     }
 }
