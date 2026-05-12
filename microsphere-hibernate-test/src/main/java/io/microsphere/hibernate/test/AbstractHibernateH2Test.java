@@ -17,14 +17,25 @@
 
 package io.microsphere.hibernate.test;
 
+import io.microsphere.hibernate.test.entity.Order;
+import io.microsphere.hibernate.test.entity.Product;
 import io.microsphere.hibernate.test.entity.User;
+import io.microsphere.hibernate.test.entity.UserProfile;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static java.lang.System.currentTimeMillis;
+import java.util.List;
+
+import static jakarta.persistence.CacheStoreMode.REFRESH;
+import static org.hibernate.LockMode.READ;
+import static org.hibernate.ReplicationMode.LATEST_VERSION;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Abstract Hibernate Test for H2 Database
@@ -40,15 +51,36 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
     @Override
     protected void init() {
         super.init();
-        this.user = new User();
-        this.user.setId(currentTimeMillis());
-        this.user.setName("Mercy");
+        user = createUser();
+    }
+
+    protected User createUser() {
+        User user = new User();
+        user.setName("Tom");
+
+        UserProfile profile = new UserProfile();
+        profile.setIdCard("ID123456");
+        profile.setUser(user);
+        user.setProfile(profile);
+
+        Order order = new Order();
+        order.setOrderNo("ORD001");
+
+        Product product = new Product();
+        product.setProductName("Laptop");
+
+        order.getProducts().add(product);
+        user.addOrder(order);
+        return user;
     }
 
     @Override
     protected Configuration buildConfiguration() {
         Configuration configuration = new Configuration()
                 .addAnnotatedClass(User.class)
+                .addAnnotatedClass(UserProfile.class)
+                .addAnnotatedClass(Order.class)
+                .addAnnotatedClass(Product.class)
                 .setProperty("jakarta.persistence.jdbc.driver", "org.h2.Driver")
                 .setProperty("jakarta.persistence.jdbc.url", "jdbc:h2:mem:test_db;DB_CLOSE_DELAY=-1")
                 .setProperty("jakarta.persistence.jdbc.user", "sa")
@@ -60,54 +92,229 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
         return configuration;
     }
 
-    @Test
-    @DisplayName("Test : persist & detach & remove")
-    void testSession() {
-        long userId = this.user.getId();
-        this.session.persist(this.user);
-
-        this.session.detach(this.user);
-
-        assertNotNull(this.user);
-
-        this.session.remove(this.user);
+    protected void doInAction(Runnable action) {
+        assertDoesNotThrow(action::run);
     }
 
-    @Test
-    @DisplayName("Test : persist & find & merge & remove")
-    void testSession2() {
-        long userId = this.user.getId();
-        this.session.persist(this.user);
+    @Nested
+    @DisplayName("Session Test")
+    class SessionTest {
 
-        this.user = this.session.find(User.class, userId);
-        assertNotNull(this.user);
+        @Test
+        @DisplayName("Test : persist & get")
+        void testPersistAndGet() {
+            doInTransaction(() -> {
+                session.persist(user);
+                User user1 = session.get(User.class, user.getId());
+                assertEquals(user, user1);
+            });
+        }
 
-        this.user.setId(currentTimeMillis());
-        this.user.setName("Ma");
-        this.session.merge(this.user);
+        @Test
+        @DisplayName("Test : persist & merge")
+        void testPersistAndMerge() {
+            doInTransaction(() -> {
+                session.persist(user);
+                user.setName("Merged User");
 
-        this.session.remove(this.user);
+                User user1 = session.get(User.class, user.getId());
+                List<Order> orders = user1.getOrders();
+                orders.forEach(order -> {
+                    order.setOrderNo("TEST ORDER NO");
+                });
+                User mergedUser = session.merge(user);
+                session.flush();
+
+                orders.forEach(order -> {
+                    order.setUser(null);
+                    session.merge(order);
+                });
+
+                user.getOrders().clear();
+                mergedUser = session.merge(user);
+
+                assertEquals(mergedUser, user);
+            });
+        }
+
+        @Test
+        @DisplayName("Test : persist & remove")
+        void testPersistAndRemove() {
+            doInTransaction(() -> {
+                session.persist(user);
+
+                UserProfile profile = user.getProfile();
+                user.setProfile(null);
+                session.remove(profile);
+                session.flush();
+
+                List<Order> orders = user.getOrders();
+                orders.forEach(order -> {
+                    session.remove(order);
+                });
+                orders.clear();
+                session.flush();
+
+                session.remove(user);
+            });
+        }
+
+        @Test
+        @DisplayName("Test : persist & replicate")
+        void testPersistAndReplicate() {
+            doInTransaction(() -> {
+                session.persist(user);
+                session.replicate(user, LATEST_VERSION);
+            });
+        }
+
+        @Test
+        @DisplayName("Test : persist & flush")
+        void testPersistAndFlush() {
+            doInTransaction(() -> {
+                session.persist(user);
+                session.flush();
+            });
+        }
+
+        @Test
+        @DisplayName("Test : persist & detach")
+        void testPersistAndDetach() {
+            doInAction(() -> {
+                session.persist(user);
+                session.detach(user);
+            });
+        }
+
+        @Test
+        @DisplayName("Test : persist & evict")
+        void testPersistAndEvict() {
+            doInAction(() -> {
+                session.persist(user);
+                session.evict(user);
+            });
+        }
+
+        @Test
+        @DisplayName("Test : persist & lock")
+        void testPersistAndLock() {
+            doInAction(() -> {
+                session.persist(user);
+                session.lock(user, READ);
+            });
+        }
+
+        @Test
+        @DisplayName("Test : persist & refresh")
+        void testPersistAndRefresh() {
+            doInTransaction(() -> {
+                session.persist(user);
+                // refresh
+                session.refresh(user, REFRESH);
+            });
+        }
+
+        @Test
+        @DisplayName("Test : persist & load")
+        void testPersistAndLoad() {
+            doInTransaction(() -> {
+                session.persist(user);
+                User user1 = session.find(User.class, user.getId());
+                assertEquals(user, user1);
+            });
+        }
+
+        @Test
+        @DisplayName("Test : persist & FROM User")
+        void testPersistAndGetManagedEntities() {
+            doInTransaction(() -> {
+                session.persist(user);
+                List<User> users = session.createQuery("FROM User", User.class).getResultList();
+                assertFalse(users.isEmpty());
+            });
+        }
+
+        void doInTransaction(Runnable action) {
+            assertDoesNotThrow(() -> {
+                Transaction transaction = session.beginTransaction();
+                action.run();
+                transaction.commit();
+            });
+        }
     }
 
-    @Test
-    @DisplayName("Test Stateless Session: insert & update & get & delete")
-    void testStatelessSession1() {
-        long userId = this.user.getId();
+    @Nested
+    @DisplayName("Stateless Session Test")
+    class StatelessSessionTest {
 
-        // insert
-        assertEquals(userId, this.statelessSession.insert(this.user));
+        @Test
+        @DisplayName("Test : insert & get")
+        void testInsertAndGet() {
+            doInTransaction(() -> {
+                Long userId = (Long) statelessSession.insert(user);
+                User user1 = statelessSession.get(User.class, userId);
+                assertEquals(user, user1);
+            });
+        }
 
-        this.user.setName("Ma");
-        // update
-        this.statelessSession.update(this.user);
+        @Test
+        @DisplayName("Test : insert & delete")
+        void testInsertAndDelete() {
+            doInTransaction(() -> {
+                Long userId = (Long) statelessSession.insert(user);
+                statelessSession.delete(user);
+                User user1 = statelessSession.get(User.class, userId);
+                assertNull(user1);
+            });
+        }
 
-        // upsert
-        this.statelessSession.upsert(this.user);
+        @Test
+        @DisplayName("Test : insert & update")
+        void testInsertAndUpdate() {
+            Long userId = (Long) statelessSession.insert(user);
+            user.setName("Updated User");
+            statelessSession.update(user);
+            User user1 = statelessSession.get(User.class, userId);
+            assertEquals(user, user1);
+        }
 
-        // get
-        assertEquals(this.user, this.statelessSession.get(User.class, userId));
+        @Test
+        @DisplayName("Test : insert & upsert")
+        void testInsertAndUpsert() {
+            Long userId = (Long) statelessSession.insert(user);
+            user.setName("Upsert User");
+            statelessSession.upsert(user);
+            User user1 = statelessSession.get(User.class, userId);
+            assertEquals(user, user1);
+        }
 
-        // delete
-        this.statelessSession.delete(this.user);
+        @Test
+        @DisplayName("Test : insert & refresh")
+        void testInsertAndRefresh() {
+            Long userId = (Long) statelessSession.insert(user);
+            user.setName("Refreshed User");
+            statelessSession.refresh(user);
+            User user1 = statelessSession.get(User.class, userId);
+            assertEquals(user, user1);
+        }
+
+        @Test
+        @DisplayName("Test : insert & fetch")
+        void testInsertAndFetch() {
+            Long userId = (Long) statelessSession.insert(user);
+            statelessSession.fetch(user);
+            User user1 = statelessSession.get(User.class, userId);
+            assertEquals(user, user1);
+        }
+
+        void doInTransaction(Runnable action) {
+            assertDoesNotThrow(() -> {
+                Transaction transaction = statelessSession.beginTransaction();
+                action.run();
+                transaction.commit();
+            });
+        }
     }
+
+
 }

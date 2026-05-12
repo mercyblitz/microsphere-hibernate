@@ -36,8 +36,17 @@ import java.util.Iterator;
  */
 public class CompositeInterceptor implements Interceptor {
 
+    private final Iterable<Interceptor> interceptors;
+
+    public CompositeInterceptor(Iterable<Interceptor> interceptors) {
+        this.interceptors = interceptors;
+    }
+
     @Override
     public boolean onLoad(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
+        for (Interceptor interceptor : interceptors) {
+            interceptor.onLoad(entity, id, state, propertyNames, types);
+        }
         return Interceptor.super.onLoad(entity, id, state, propertyNames, types);
     }
 
