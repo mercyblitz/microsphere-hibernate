@@ -4,7 +4,7 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/microsphere-projects/microsphere-hibernate)
 [![Maven Build](https://github.com/microsphere-projects/microsphere-hibernate/actions/workflows/maven-build.yml/badge.svg)](https://github.com/microsphere-projects/microsphere-hibernate/actions/workflows/maven-build.yml)
-[![Codecov](https://codecov.io/gh/microsphere-projects/microsphere-hibernate/branch/main/graph/badge.svg)](https://app.codecov.io/gh/microsphere-projects/microsphere-hibernate)
+[![Codecov](https://codecov.io/gh/microsphere-projects/microsphere-hibernate/branch/dev-1.x/graph/badge.svg)](https://app.codecov.io/gh/microsphere-projects/microsphere-hibernate)
 ![Maven](https://img.shields.io/maven-central/v/io.github.microsphere-projects/microsphere-hibernate.svg)
 ![License](https://img.shields.io/github/license/microsphere-projects/microsphere-hibernate.svg)
 
