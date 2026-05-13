@@ -22,7 +22,6 @@ import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
 import org.hibernate.collection.spi.PersistentCollection;
 import org.hibernate.engine.spi.EntityEntry;
-import org.hibernate.event.spi.DeleteContext;
 import org.hibernate.event.spi.DeleteEvent;
 import org.hibernate.event.spi.DeleteEventListener;
 import org.hibernate.event.spi.EventType;
@@ -34,10 +33,8 @@ import org.hibernate.event.spi.LoadEvent;
 import org.hibernate.event.spi.LoadEventListener;
 import org.hibernate.event.spi.LockEvent;
 import org.hibernate.event.spi.LockEventListener;
-import org.hibernate.event.spi.MergeContext;
 import org.hibernate.event.spi.MergeEvent;
 import org.hibernate.event.spi.MergeEventListener;
-import org.hibernate.event.spi.PersistContext;
 import org.hibernate.event.spi.PersistEvent;
 import org.hibernate.event.spi.PersistEventListener;
 import org.hibernate.event.spi.PostCollectionRecreateEvent;
@@ -54,8 +51,6 @@ import org.hibernate.event.spi.PostLoadEvent;
 import org.hibernate.event.spi.PostLoadEventListener;
 import org.hibernate.event.spi.PostUpdateEvent;
 import org.hibernate.event.spi.PostUpdateEventListener;
-import org.hibernate.event.spi.PostUpsertEvent;
-import org.hibernate.event.spi.PostUpsertEventListener;
 import org.hibernate.event.spi.PreCollectionRecreateEvent;
 import org.hibernate.event.spi.PreCollectionRecreateEventListener;
 import org.hibernate.event.spi.PreCollectionRemoveEvent;
@@ -70,9 +65,6 @@ import org.hibernate.event.spi.PreLoadEvent;
 import org.hibernate.event.spi.PreLoadEventListener;
 import org.hibernate.event.spi.PreUpdateEvent;
 import org.hibernate.event.spi.PreUpdateEventListener;
-import org.hibernate.event.spi.PreUpsertEvent;
-import org.hibernate.event.spi.PreUpsertEventListener;
-import org.hibernate.event.spi.RefreshContext;
 import org.hibernate.event.spi.RefreshEvent;
 import org.hibernate.event.spi.RefreshEventListener;
 import org.hibernate.event.spi.ReplicateEvent;
@@ -80,6 +72,8 @@ import org.hibernate.event.spi.ReplicateEventListener;
 import org.hibernate.persister.entity.EntityPersister;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static io.microsphere.collection.ListUtils.newLinkedList;
 import static io.microsphere.lang.Prioritized.COMPARATOR;
@@ -106,8 +100,6 @@ import static java.util.ServiceLoader.load;
  * @see PostUpdateEventListener
  * @see PreInsertEventListener
  * @see PostInsertEventListener
- * @see PreUpsertEventListener
- * @see PostUpsertEventListener
  * @see PreCollectionRecreateEventListener
  * @see PostCollectionRecreateEventListener
  * @see PreCollectionRemoveEventListener
@@ -125,7 +117,6 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
         PreDeleteEventListener, PostDeleteEventListener,
         PreUpdateEventListener, PostUpdateEventListener,
         PreInsertEventListener, PostInsertEventListener,
-        PreUpsertEventListener, PostUpsertEventListener,
         PreCollectionRecreateEventListener, PostCollectionRecreateEventListener,
         PreCollectionRemoveEventListener, PostCollectionRemoveEventListener,
         PreCollectionUpdateEventListener, PostCollectionUpdateEventListener {
@@ -154,7 +145,7 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
     }
 
     @Override
-    public void onDelete(DeleteEvent event, DeleteContext transientEntities) throws HibernateException {
+    public void onDelete(DeleteEvent event, Set transientEntities) throws HibernateException {
         this.callback.onDelete(event.getObject(), event.isCascadeDeleteEnabled(), event.isOrphanRemovalBeforeUpdates());
     }
 
@@ -164,7 +155,7 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
     }
 
     @Override
-    public void onPersist(PersistEvent event, PersistContext createdAlready) throws HibernateException {
+    public void onPersist(PersistEvent event, Map createdAlready) throws HibernateException {
         this.callback.onPersist(event.getObject(), event.getEntityName());
     }
 
@@ -174,7 +165,7 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
     }
 
     @Override
-    public void onMerge(MergeEvent event, MergeContext copiedAlready) throws HibernateException {
+    public void onMerge(MergeEvent event, Map copiedAlready) throws HibernateException {
         this.callback.onMerge(event.getOriginal(), event.getRequestedId(), event.getEntity(), event.getEntityName(),
                 event.getResult());
     }
@@ -216,7 +207,7 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
     }
 
     @Override
-    public void onRefresh(RefreshEvent event, RefreshContext refreshedAlready) throws HibernateException {
+    public void onRefresh(RefreshEvent event, Map refreshedAlready) throws HibernateException {
         this.callback.onRefresh(event.getObject(), event.getEntityName(), getLockMode(event.getLockOptions()));
     }
 
@@ -306,63 +297,53 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
     }
 
     @Override
-    public boolean onPreUpsert(PreUpsertEvent event) {
-        EntityPersister persister = event.getPersister();
-        this.callback.onPreUpsert(event.getEntity(),
-                event.getId(),
-                event.getState(),
-                persister.getPropertyNames(),
-                persister.getPropertyTypes());
-        return false;
-    }
-
-    @Override
-    public void onPostUpsert(PostUpsertEvent event) {
-        EntityPersister persister = event.getPersister();
-        this.callback.onPostUpsert(event.getEntity(),
-                event.getId(),
-                event.getState(),
-                persister.getPropertyNames(),
-                persister.getPropertyTypes());
-    }
-
-    @Override
     public void onPreRecreateCollection(PreCollectionRecreateEvent event) {
-        PersistentCollection<?> collection = event.getCollection();
+        PersistentCollection collection = event.getCollection();
         this.callback.onPreRecreateCollection(collection, collection.getKey());
     }
 
     @Override
     public void onPostRecreateCollection(PostCollectionRecreateEvent event) {
-        PersistentCollection<?> collection = event.getCollection();
+        PersistentCollection collection = event.getCollection();
         this.callback.onPostRecreateCollection(collection, collection.getKey());
     }
 
     @Override
     public void onPreRemoveCollection(PreCollectionRemoveEvent event) {
-        PersistentCollection<?> collection = event.getCollection();
+        PersistentCollection collection = event.getCollection();
         this.callback.onPreCollectionRemove(collection, collection.getKey());
     }
 
     @Override
     public void onPostRemoveCollection(PostCollectionRemoveEvent event) {
-        PersistentCollection<?> collection = event.getCollection();
+        PersistentCollection collection = event.getCollection();
         this.callback.onPostRemoveCollection(collection, collection.getKey());
     }
 
     @Override
     public void onPreUpdateCollection(PreCollectionUpdateEvent event) {
-        PersistentCollection<?> collection = event.getCollection();
+        PersistentCollection collection = event.getCollection();
         this.callback.onPreUpdateCollection(collection, collection.getKey());
     }
 
     @Override
+    public boolean requiresPostCommitHanding(EntityPersister persister) {
+        return false;
+    }
+
+    @Override
+    public boolean requiresPostCommitHandling(EntityPersister persister) {
+        return PostDeleteEventListener.super.requiresPostCommitHandling(persister);
+    }
+
+    @Override
     public void onPostUpdateCollection(PostCollectionUpdateEvent event) {
-        PersistentCollection<?> collection = event.getCollection();
+        PersistentCollection collection = event.getCollection();
         this.callback.onPostUpdateCollection(collection, collection.getKey());
     }
 
     protected LockMode getLockMode(LockOptions lockOptions) {
         return lockOptions.getLockMode();
     }
+
 }

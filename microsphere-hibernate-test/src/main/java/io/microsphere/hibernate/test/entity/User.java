@@ -16,20 +16,20 @@
  */
 package io.microsphere.hibernate.test.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static jakarta.persistence.CascadeType.ALL;
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "t_user")
@@ -86,9 +86,12 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof User user1)) return false;
-        return Objects.equals(id, user1.id)
-                && Objects.equals(name, user1.name);
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User that = (User) o;
+        return Objects.equals(id, that.id)
+                && Objects.equals(name, that.name);
     }
 
     @Override

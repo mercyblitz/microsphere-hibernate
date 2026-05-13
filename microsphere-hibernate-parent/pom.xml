@@ -19,7 +19,7 @@
     <description>Microsphere Hibernate Parent</description>
 
     <properties>
-        <microsphere-spring-cloud.version>0.2.11</microsphere-spring-cloud.version>
+        <microsphere-spring-cloud.version>0.1.11</microsphere-spring-cloud.version>
     </properties>
 
     <dependencyManagement>
@@ -27,11 +27,9 @@
 
             <!-- Hibernate Dependencies -->
             <dependency>
-                <groupId>org.hibernate.orm</groupId>
-                <artifactId>hibernate-platform</artifactId>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
                 <version>${hibernate.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
 
             <!-- Microsphere Spring Cloud Dependencies -->
@@ -48,68 +46,54 @@
 
     <profiles>
         <profile>
-            <id>hibernate-7.3</id>
+            <id>hibernate-5.6</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <hibernate.version>7.3.4.Final</hibernate.version>
+                <hibernate.version>5.6.15.Final</hibernate.version>
             </properties>
         </profile>
 
         <profile>
-            <id>hibernate-7.2</id>
+            <id>hibernate-5.5</id>
             <properties>
-                <hibernate.version>7.2.14.Final</hibernate.version>
+                <hibernate.version>5.5.9.Final</hibernate.version>
             </properties>
         </profile>
 
         <profile>
-            <id>hibernate-7.1</id>
+            <id>hibernate-5.4</id>
             <properties>
-                <hibernate.version>7.1.25.Final</hibernate.version>
+                <hibernate.version>5.4.33.Final</hibernate.version>
             </properties>
         </profile>
 
         <profile>
-            <id>hibernate-7.0</id>
+            <id>hibernate-5.3</id>
             <properties>
-                <hibernate.version>7.0.10.Final</hibernate.version>
+                <hibernate.version>5.3.38.Final</hibernate.version>
             </properties>
         </profile>
 
         <profile>
-            <id>hibernate-6.6</id>
+            <id>hibernate-5.2</id>
             <properties>
-                <hibernate.version>6.6.x</hibernate.version>
+                <hibernate.version>5.2.18.Final</hibernate.version>
             </properties>
         </profile>
 
         <profile>
-            <id>hibernate-6.5</id>
+            <id>hibernate-5.1</id>
             <properties>
-                <hibernate.version>6.5.3.Final</hibernate.version>
+                <hibernate.version>5.1.9.Final</hibernate.version>
             </properties>
         </profile>
 
         <profile>
-            <id>hibernate-6.4</id>
+            <id>hibernate-5.0</id>
             <properties>
-                <hibernate.version>6.4.10.Final</hibernate.version>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>hibernate-6.3</id>
-            <properties>
-                <hibernate.version>6.3.2.Final</hibernate.version>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>hibernate-6.2</id>
-            <properties>
-                <hibernate.version>6.2.52.Final</hibernate.version>
+                <hibernate.version>5.0.9.Final</hibernate.version>
             </properties>
         </profile>
 

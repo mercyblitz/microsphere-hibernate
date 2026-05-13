@@ -18,18 +18,18 @@
 package io.microsphere.hibernate.test.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "t_product")
@@ -70,10 +70,13 @@ public class Product {
 
     @Override
     public final boolean equals(Object o) {
-        if (!(o instanceof Product product)) return false;
+        if (!(o instanceof Product)) {
+            return false;
+        }
 
-        return Objects.equals(id, product.id)
-                && Objects.equals(productName, product.productName);
+        Product that = (Product) o;
+        return Objects.equals(id, that.id)
+                && Objects.equals(productName, that.productName);
     }
 
     @Override

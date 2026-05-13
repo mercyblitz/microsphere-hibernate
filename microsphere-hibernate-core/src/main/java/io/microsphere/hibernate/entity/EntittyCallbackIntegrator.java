@@ -18,7 +18,6 @@
 package io.microsphere.hibernate.entity;
 
 import org.hibernate.boot.Metadata;
-import org.hibernate.boot.spi.BootstrapContext;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.event.service.spi.DuplicationStrategy;
 import org.hibernate.event.service.spi.EventListenerRegistry;
@@ -39,7 +38,6 @@ import static org.hibernate.event.spi.EventType.POST_DELETE;
 import static org.hibernate.event.spi.EventType.POST_INSERT;
 import static org.hibernate.event.spi.EventType.POST_LOAD;
 import static org.hibernate.event.spi.EventType.POST_UPDATE;
-import static org.hibernate.event.spi.EventType.POST_UPSERT;
 import static org.hibernate.event.spi.EventType.PRE_COLLECTION_RECREATE;
 import static org.hibernate.event.spi.EventType.PRE_COLLECTION_REMOVE;
 import static org.hibernate.event.spi.EventType.PRE_COLLECTION_UPDATE;
@@ -47,7 +45,6 @@ import static org.hibernate.event.spi.EventType.PRE_DELETE;
 import static org.hibernate.event.spi.EventType.PRE_INSERT;
 import static org.hibernate.event.spi.EventType.PRE_LOAD;
 import static org.hibernate.event.spi.EventType.PRE_UPDATE;
-import static org.hibernate.event.spi.EventType.PRE_UPSERT;
 import static org.hibernate.event.spi.EventType.REFRESH;
 import static org.hibernate.event.spi.EventType.REPLICATE;
 
@@ -63,7 +60,7 @@ import static org.hibernate.event.spi.EventType.REPLICATE;
 public class EntittyCallbackIntegrator implements Integrator {
 
     public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
-        final EventListenerRegistry eventListenerRegistry = sessionFactory.getEventListenerRegistry();
+        EventListenerRegistry eventListenerRegistry = serviceRegistry.getService(EventListenerRegistry.class);
 
         // Add DuplicationStrategy
         eventListenerRegistry.addDuplicationStrategy(new EntityCallbackListenerDuplicationStrategy());
@@ -101,9 +98,6 @@ public class EntittyCallbackIntegrator implements Integrator {
         eventListenerRegistry.appendListeners(PRE_INSERT, listener);
         eventListenerRegistry.appendListeners(POST_INSERT, listener);
 
-        eventListenerRegistry.appendListeners(PRE_UPSERT, listener);
-        eventListenerRegistry.appendListeners(POST_UPSERT, listener);
-
         eventListenerRegistry.appendListeners(PRE_COLLECTION_RECREATE, listener);
         eventListenerRegistry.appendListeners(POST_COLLECTION_RECREATE, listener);
 
@@ -113,11 +107,6 @@ public class EntittyCallbackIntegrator implements Integrator {
         eventListenerRegistry.appendListeners(PRE_COLLECTION_UPDATE, listener);
         eventListenerRegistry.appendListeners(POST_COLLECTION_UPDATE, listener);
 
-    }
-
-    @Override
-    public void integrate(Metadata metadata, BootstrapContext bootstrapContext, SessionFactoryImplementor sessionFactory) {
-        integrate(metadata, sessionFactory, (SessionFactoryServiceRegistry) sessionFactory.getServiceRegistry());
     }
 
     @Override
