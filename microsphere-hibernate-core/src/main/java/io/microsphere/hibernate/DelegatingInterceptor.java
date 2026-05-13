@@ -29,7 +29,6 @@ import java.util.Iterator;
 
 import static org.hibernate.EmptyInterceptor.INSTANCE;
 
-
 /**
  * Delegating {@link Interceptor}
  *

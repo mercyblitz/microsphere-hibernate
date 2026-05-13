@@ -327,6 +327,12 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
     }
 
     @Override
+    public void onPostUpdateCollection(PostCollectionUpdateEvent event) {
+        PersistentCollection collection = event.getCollection();
+        this.callback.onPostUpdateCollection(collection, collection.getKey());
+    }
+
+    @Override
     public boolean requiresPostCommitHanding(EntityPersister persister) {
         return false;
     }
@@ -336,14 +342,7 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
         return PostDeleteEventListener.super.requiresPostCommitHandling(persister);
     }
 
-    @Override
-    public void onPostUpdateCollection(PostCollectionUpdateEvent event) {
-        PersistentCollection collection = event.getCollection();
-        this.callback.onPostUpdateCollection(collection, collection.getKey());
-    }
-
     protected LockMode getLockMode(LockOptions lockOptions) {
         return lockOptions.getLockMode();
     }
-
 }
