@@ -19,11 +19,18 @@
     <description>Microsphere Hibernate Parent</description>
 
     <properties>
-        <microsphere-spring-cloud.version>0.2.11</microsphere-spring-cloud.version>
+        <microsphere-spring-cloud.version>0.1.11</microsphere-spring-cloud.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- Hibernate Dependencies -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
 
             <!-- Microsphere Spring Cloud Dependencies -->
             <dependency>
@@ -36,5 +43,60 @@
 
         </dependencies>
     </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>hibernate-5.6</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <hibernate.version>5.6.15.Final</hibernate.version>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>hibernate-5.5</id>
+            <properties>
+                <hibernate.version>5.5.9.Final</hibernate.version>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>hibernate-5.4</id>
+            <properties>
+                <hibernate.version>5.4.33.Final</hibernate.version>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>hibernate-5.3</id>
+            <properties>
+                <hibernate.version>5.3.38.Final</hibernate.version>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>hibernate-5.2</id>
+            <properties>
+                <hibernate.version>5.2.18.Final</hibernate.version>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>hibernate-5.1</id>
+            <properties>
+                <hibernate.version>5.1.9.Final</hibernate.version>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>hibernate-5.0</id>
+            <properties>
+                <hibernate.version>5.0.9.Final</hibernate.version>
+            </properties>
+        </profile>
+
+    </profiles>
 
 </project>
