@@ -17,22 +17,22 @@
 
 package io.microsphere.hibernate.test.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static jakarta.persistence.CascadeType.MERGE;
-import static jakarta.persistence.CascadeType.PERSIST;
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "t_order")
@@ -90,9 +90,12 @@ public class Order {
 
     @Override
     public final boolean equals(Object o) {
-        if (!(o instanceof Order order)) return false;
+        if (!(o instanceof Order)) {
+            return false;
+        }
 
-        return Objects.equals(id, order.id) && Objects.equals(orderNo, order.orderNo);
+        Order that = (Order) o;
+        return Objects.equals(id, that.id) && Objects.equals(orderNo, that.orderNo);
     }
 
     @Override

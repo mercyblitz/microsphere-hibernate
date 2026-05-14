@@ -30,7 +30,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Set;
 
-import static jakarta.persistence.CacheStoreMode.REFRESH;
 import static org.hibernate.LockMode.READ;
 import static org.hibernate.ReplicationMode.LATEST_VERSION;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -82,10 +81,10 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
                 .addAnnotatedClass(UserProfile.class)
                 .addAnnotatedClass(Order.class)
                 .addAnnotatedClass(Product.class)
-                .setProperty("jakarta.persistence.jdbc.driver", "org.h2.Driver")
-                .setProperty("jakarta.persistence.jdbc.url", "jdbc:h2:mem:test_db;DB_CLOSE_DELAY=-1")
-                .setProperty("jakarta.persistence.jdbc.user", "sa")
-                .setProperty("jakarta.persistence.jdbc.password", "")
+                .setProperty("hibernate.connection.driver_class", "org.h2.Driver")
+                .setProperty("hibernate.connection.url", "jdbc:h2:mem:test_db;DB_CLOSE_DELAY=-1")
+                .setProperty("hibernate.connection.username", "sa")
+                .setProperty("hibernate.connection.password", "")
                 .setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect")
                 .setProperty("hibernate.format_sql", "true")
                 .setProperty("hibernate.show_sql", "true")
@@ -135,7 +134,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
                 orders.forEach(order -> {
                     order.setOrderNo("TEST ORDER NO");
                 });
-                User mergedUser = session.merge(user);
+                User mergedUser = (User) session.merge(user);
                 session.flush();
 
                 orders.forEach(order -> {
@@ -144,7 +143,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
                 });
 
                 user.getOrders().clear();
-                mergedUser = session.merge(user);
+                mergedUser = (User) session.merge(user);
 
                 assertEquals(mergedUser, user);
             });
@@ -223,7 +222,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
             doInTransaction(() -> {
                 session.persist(user);
                 // refresh
-                session.refresh(user, REFRESH);
+                session.refresh(user);
             });
         }
 
@@ -265,7 +264,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
         void testInsertAndGet() {
             doInTransaction(() -> {
                 Long userId = (Long) statelessSession.insert(user);
-                User user1 = statelessSession.get(User.class, userId);
+                User user1 = (User) statelessSession.get(User.class, userId);
                 assertEquals(user, user1);
             });
         }
@@ -276,7 +275,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
             doInTransaction(() -> {
                 Long userId = (Long) statelessSession.insert(user);
                 statelessSession.delete(user);
-                User user1 = statelessSession.get(User.class, userId);
+                User user1 = (User) statelessSession.get(User.class, userId);
                 assertNull(user1);
             });
         }
@@ -287,17 +286,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
             Long userId = (Long) statelessSession.insert(user);
             user.setName("Updated User");
             statelessSession.update(user);
-            User user1 = statelessSession.get(User.class, userId);
-            assertEquals(user, user1);
-        }
-
-        @Test
-        @DisplayName("Test : insert & upsert")
-        void testInsertAndUpsert() {
-            Long userId = (Long) statelessSession.insert(user);
-            user.setName("Upsert User");
-            statelessSession.upsert(user);
-            User user1 = statelessSession.get(User.class, userId);
+            User user1 = (User) statelessSession.get(User.class, userId);
             assertEquals(user, user1);
         }
 
@@ -307,16 +296,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
             Long userId = (Long) statelessSession.insert(user);
             user.setName("Refreshed User");
             statelessSession.refresh(user);
-            User user1 = statelessSession.get(User.class, userId);
-            assertEquals(user, user1);
-        }
-
-        @Test
-        @DisplayName("Test : insert & fetch")
-        void testInsertAndFetch() {
-            Long userId = (Long) statelessSession.insert(user);
-            statelessSession.fetch(user);
-            User user1 = statelessSession.get(User.class, userId);
+            User user1 = (User) statelessSession.get(User.class, userId);
             assertEquals(user, user1);
         }
 

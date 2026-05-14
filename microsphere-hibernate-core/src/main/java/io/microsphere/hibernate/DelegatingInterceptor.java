@@ -19,16 +19,15 @@ package io.microsphere.hibernate;
 import io.microsphere.annotation.Nullable;
 import io.microsphere.lang.DelegatingWrapper;
 import org.hibernate.CallbackException;
+import org.hibernate.EntityMode;
 import org.hibernate.Interceptor;
 import org.hibernate.Transaction;
-import org.hibernate.metamodel.RepresentationMode;
-import org.hibernate.metamodel.spi.EntityRepresentationStrategy;
 import org.hibernate.type.Type;
 
 import java.io.Serializable;
 import java.util.Iterator;
 
-import static org.hibernate.internal.EmptyInterceptor.INSTANCE;
+import static org.hibernate.EmptyInterceptor.INSTANCE;
 
 /**
  * Delegating {@link Interceptor}
@@ -46,93 +45,47 @@ public class DelegatingInterceptor implements Interceptor, DelegatingWrapper {
     }
 
     @Override
-    public boolean onLoad(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
-        return delegate.onLoad(entity, id, state, propertyNames, types);
-    }
-
-    @Deprecated(since = "6.0")
     public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
         return delegate.onLoad(entity, id, state, propertyNames, types);
     }
 
     @Override
-    public boolean onPersist(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
-        return delegate.onPersist(entity, id, state, propertyNames, types);
-    }
-
-    @Override
-    public void onRemove(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
-        delegate.onRemove(entity, id, state, propertyNames, types);
-    }
-
-    @Override
-    public boolean onFlushDirty(Object entity, Object id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) throws CallbackException {
-        return delegate.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
-    }
-
-    @Deprecated(since = "6.0")
     public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) throws CallbackException {
         return delegate.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
     }
 
-    @Deprecated(since = "6.0")
+    @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
         return delegate.onSave(entity, id, state, propertyNames, types);
     }
 
-    @Deprecated(since = "6.6")
-    public boolean onSave(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
-        return delegate.onSave(entity, id, state, propertyNames, types);
-    }
-
-    @Deprecated(since = "6.0")
+    @Override
     public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
         delegate.onDelete(entity, id, state, propertyNames, types);
     }
 
-    @Deprecated(since = "6.6")
     @Override
-    public void onDelete(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
-        delegate.onDelete(entity, id, state, propertyNames, types);
-    }
-
-    @Deprecated(since = "6.0")
     public void onCollectionRecreate(Object collection, Serializable key) throws CallbackException {
         delegate.onCollectionRecreate(collection, key);
     }
 
     @Override
-    public void onCollectionRecreate(Object collection, Object key) throws CallbackException {
-        delegate.onCollectionRecreate(collection, key);
-    }
-
-    @Deprecated(since = "6.0")
     public void onCollectionRemove(Object collection, Serializable key) throws CallbackException {
         delegate.onCollectionRemove(collection, key);
     }
 
     @Override
-    public void onCollectionRemove(Object collection, Object key) throws CallbackException {
-        delegate.onCollectionRemove(collection, key);
-    }
-
-    @Deprecated(since = "6.0")
     public void onCollectionUpdate(Object collection, Serializable key) throws CallbackException {
         delegate.onCollectionUpdate(collection, key);
     }
 
     @Override
-    public void onCollectionUpdate(Object collection, Object key) throws CallbackException {
-        delegate.onCollectionUpdate(collection, key);
-    }
-
-    @Override
-    public void preFlush(Iterator<Object> entities) throws CallbackException {
+    public void preFlush(Iterator entities) throws CallbackException {
         delegate.preFlush(entities);
     }
 
     @Override
-    public void postFlush(Iterator<Object> entities) throws CallbackException {
+    public void postFlush(Iterator entities) throws CallbackException {
         delegate.postFlush(entities);
     }
 
@@ -141,24 +94,14 @@ public class DelegatingInterceptor implements Interceptor, DelegatingWrapper {
         return delegate.isTransient(entity);
     }
 
-    @Deprecated(since = "6.0")
+    @Override
     public int[] findDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
         return delegate.findDirty(entity, id, currentState, previousState, propertyNames, types);
     }
 
     @Override
-    public int[] findDirty(Object entity, Object id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
-        return delegate.findDirty(entity, id, currentState, previousState, propertyNames, types);
-    }
-
-    @Override
-    public Object instantiate(String entityName, EntityRepresentationStrategy representationStrategy, Object id) throws CallbackException {
-        return delegate.instantiate(entityName, representationStrategy, id);
-    }
-
-    @Override
-    public Object instantiate(String entityName, RepresentationMode representationMode, Object id) throws CallbackException {
-        return delegate.instantiate(entityName, representationMode, id);
+    public Object instantiate(String entityName, EntityMode entityMode, Serializable id) throws CallbackException {
+        return delegate.instantiate(entityName, entityMode, id);
     }
 
     @Override
@@ -166,13 +109,8 @@ public class DelegatingInterceptor implements Interceptor, DelegatingWrapper {
         return delegate.getEntityName(object);
     }
 
-    @Deprecated(since = "6.0")
-    public Object getEntity(String entityName, Serializable id) throws CallbackException {
-        return delegate.getEntity(entityName, id);
-    }
-
     @Override
-    public Object getEntity(String entityName, Object id) throws CallbackException {
+    public Object getEntity(String entityName, Serializable id) throws CallbackException {
         return delegate.getEntity(entityName, id);
     }
 
@@ -191,24 +129,10 @@ public class DelegatingInterceptor implements Interceptor, DelegatingWrapper {
         delegate.afterTransactionCompletion(tx);
     }
 
+    @Deprecated
     @Override
-    public void onInsert(Object entity, Object id, Object[] state, String[] propertyNames, Type[] propertyTypes) {
-        delegate.onInsert(entity, id, state, propertyNames, propertyTypes);
-    }
-
-    @Override
-    public void onUpdate(Object entity, Object id, Object[] state, String[] propertyNames, Type[] propertyTypes) {
-        delegate.onUpdate(entity, id, state, propertyNames, propertyTypes);
-    }
-
-    @Override
-    public void onUpsert(Object entity, Object id, Object[] state, String[] propertyNames, Type[] propertyTypes) {
-        delegate.onUpsert(entity, id, state, propertyNames, propertyTypes);
-    }
-
-    @Override
-    public void onDelete(Object entity, Object id, String[] propertyNames, Type[] propertyTypes) {
-        delegate.onDelete(entity, id, propertyNames, propertyTypes);
+    public String onPrepareStatement(String sql) {
+        return delegate.onPrepareStatement(sql);
     }
 
     @Override
