@@ -248,11 +248,14 @@ public class HibernateExtension implements BeforeAllCallback, BeforeEachCallback
 
         for (String property : annotation.properties()) {
             int separatorIndex = property.indexOf('=');
-            if (separatorIndex > 0) {
-                String key = property.substring(0, separatorIndex).trim();
-                String value = property.substring(separatorIndex + 1).trim();
-                configuration.setProperty(key, value);
+            if (separatorIndex <= 0) {
+                logger.warn("Ignoring malformed Hibernate property (expected 'key=value'): '{}'",
+                        property);
+                continue;
             }
+            String key = property.substring(0, separatorIndex).trim();
+            String value = property.substring(separatorIndex + 1).trim();
+            configuration.setProperty(key, value);
         }
 
         for (String packageName : annotation.scanEntityPackages()) {
@@ -293,6 +296,8 @@ public class HibernateExtension implements BeforeAllCallback, BeforeEachCallback
                                               ClassLoader classLoader) throws ClassNotFoundException {
         File[] files = directory.listFiles();
         if (files == null) {
+            logger.warn("Could not list files in directory '{}' while scanning for entity classes",
+                    directory.getAbsolutePath());
             return;
         }
         for (File file : files) {
@@ -314,8 +319,13 @@ public class HibernateExtension implements BeforeAllCallback, BeforeEachCallback
     private void findEntityClassesInJar(Configuration configuration, URL url, String packageName,
                                         ClassLoader classLoader) throws Exception {
         String urlFile = url.getFile();
-        String jarPath = URLDecoder.decode(
-                urlFile.substring(5, urlFile.indexOf('!')), StandardCharsets.UTF_8);
+        int bangIndex = urlFile.indexOf('!');
+        String rawJarPath = bangIndex >= 0 ? urlFile.substring(0, bangIndex) : urlFile;
+        // Strip the leading "file:" scheme if present
+        if (rawJarPath.startsWith("file:")) {
+            rawJarPath = rawJarPath.substring(5);
+        }
+        String jarPath = URLDecoder.decode(rawJarPath, StandardCharsets.UTF_8);
         String packagePath = packageName.replace('.', '/');
         try (JarFile jar = new JarFile(jarPath)) {
             Enumeration<JarEntry> entries = jar.entries();
