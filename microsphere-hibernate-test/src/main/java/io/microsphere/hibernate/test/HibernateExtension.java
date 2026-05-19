@@ -17,6 +17,9 @@
 
 package io.microsphere.hibernate.test;
 
+import io.microsphere.io.scanner.SimpleClassScanner;
+import io.microsphere.logging.Logger;
+import io.microsphere.logging.LoggerFactory;
 import jakarta.persistence.Entity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -31,19 +34,11 @@ import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
 import java.util.Optional;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.Set;
 
 /**
  * JUnit Jupiter extension that manages the Hibernate lifecycle for test classes annotated
@@ -258,92 +253,18 @@ public class HibernateExtension implements BeforeAllCallback, BeforeEachCallback
             configuration.setProperty(key, value);
         }
 
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         for (String packageName : annotation.scanEntityPackages()) {
-            scanAndAddEntityClasses(configuration, packageName);
+            Set<Class<?>> classes = SimpleClassScanner.INSTANCE.scan(classLoader, packageName, true, true);
+            for (Class<?> clazz : classes) {
+                if (clazz.isAnnotationPresent(Entity.class)) {
+                    configuration.addAnnotatedClass(clazz);
+                    logger.debug("Registered entity class: {}", clazz.getName());
+                }
+            }
         }
 
         return configuration;
-    }
-
-    /**
-     * Scan the given package for classes annotated with {@link Entity} and add them to the
-     * {@link Configuration}.
-     */
-    private void scanAndAddEntityClasses(Configuration configuration, String packageName) {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        String path = packageName.replace('.', '/');
-        try {
-            Enumeration<URL> resources = classLoader.getResources(path);
-            while (resources.hasMoreElements()) {
-                URL resource = resources.nextElement();
-                String protocol = resource.getProtocol();
-                if ("file".equals(protocol)) {
-                    File directory = new File(resource.toURI());
-                    findEntityClassesInDirectory(configuration, directory, packageName,
-                            classLoader);
-                } else if ("jar".equals(protocol)) {
-                    findEntityClassesInJar(configuration, resource, packageName, classLoader);
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to scan entity classes in package: " + packageName,
-                    e);
-        }
-    }
-
-    private void findEntityClassesInDirectory(Configuration configuration, File directory,
-                                              String packageName,
-                                              ClassLoader classLoader) throws ClassNotFoundException {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            logger.warn("Could not list files in directory '{}' while scanning for entity classes",
-                    directory.getAbsolutePath());
-            return;
-        }
-        for (File file : files) {
-            if (file.isDirectory()) {
-                findEntityClassesInDirectory(configuration, file,
-                        packageName + "." + file.getName(), classLoader);
-            } else if (file.getName().endsWith(".class")) {
-                String className = packageName + "."
-                        + file.getName().substring(0, file.getName().length() - 6);
-                Class<?> clazz = classLoader.loadClass(className);
-                if (clazz.isAnnotationPresent(Entity.class)) {
-                    configuration.addAnnotatedClass(clazz);
-                    logger.debug("Registered entity class: {}", className);
-                }
-            }
-        }
-    }
-
-    private void findEntityClassesInJar(Configuration configuration, URL url, String packageName,
-                                        ClassLoader classLoader) throws Exception {
-        String urlFile = url.getFile();
-        int bangIndex = urlFile.indexOf('!');
-        String rawJarPath = bangIndex >= 0 ? urlFile.substring(0, bangIndex) : urlFile;
-        // Strip the leading "file:" scheme if present
-        if (rawJarPath.startsWith("file:")) {
-            rawJarPath = rawJarPath.substring(5);
-        }
-        String jarPath = URLDecoder.decode(rawJarPath, StandardCharsets.UTF_8);
-        String packagePath = packageName.replace('.', '/');
-        try (JarFile jar = new JarFile(jarPath)) {
-            Enumeration<JarEntry> entries = jar.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
-                String entryName = entry.getName();
-                if (!entry.isDirectory() && entryName.endsWith(".class")
-                        && entryName.startsWith(packagePath + "/")) {
-                    String className = entryName.replace('/', '.').substring(0,
-                            entryName.length() - 6);
-                    Class<?> clazz = classLoader.loadClass(className);
-                    if (clazz.isAnnotationPresent(Entity.class)) {
-                        configuration.addAnnotatedClass(clazz);
-                        logger.debug("Registered entity class from JAR: {}", className);
-                    }
-                }
-            }
-        }
     }
 
     /**
