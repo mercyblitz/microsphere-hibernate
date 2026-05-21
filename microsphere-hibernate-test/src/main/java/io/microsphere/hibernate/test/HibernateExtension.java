@@ -20,7 +20,6 @@ package io.microsphere.hibernate.test;
 import io.microsphere.io.scanner.SimpleClassScanner;
 import io.microsphere.logging.Logger;
 import io.microsphere.logging.LoggerFactory;
-import jakarta.persistence.Entity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
@@ -35,6 +34,7 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
+import javax.persistence.Entity;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Optional;

@@ -60,6 +60,28 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 )
 class HibernateAnnotationTest {
 
+    @HibernateRuntime
+    private static Configuration configuration;
+
+    @HibernateRuntime
+    private static SessionFactory sessionFactory;
+
+    @HibernateRuntime
+    private static Session session;
+
+    @HibernateRuntime
+    private static StatelessSession statelessSession;
+
+    @Test
+    void test() {
+        assertNotNull(configuration);
+        assertNotNull(sessionFactory);
+        // Session and StatelessSession must NOT be injected into static fields
+        assertNull(session);
+        assertNull(statelessSession);
+    }
+
+
     @Nested
     class FieldTest {
 
@@ -81,31 +103,6 @@ class HibernateAnnotationTest {
             assertNotNull(sessionFactory);
             assertNotNull(session);
             assertNotNull(statelessSession);
-        }
-    }
-
-    @Nested
-    class StaticFieldTest {
-
-        @HibernateRuntime
-        private static Configuration configuration;
-
-        @HibernateRuntime
-        private static SessionFactory sessionFactory;
-
-        @HibernateRuntime
-        private static Session session;
-
-        @HibernateRuntime
-        private static StatelessSession statelessSession;
-
-        @Test
-        void test() {
-            assertNotNull(configuration);
-            assertNotNull(sessionFactory);
-            // Session and StatelessSession must NOT be injected into static fields
-            assertNull(session);
-            assertNull(statelessSession);
         }
     }
 
