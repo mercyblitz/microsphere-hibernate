@@ -32,6 +32,23 @@ import static org.hibernate.EmptyInterceptor.INSTANCE;
 /**
  * Delegating {@link Interceptor}
  *
+ * <h3>Example Usage</h3>
+ * <pre>{@code
+ *   // Wrap a custom Interceptor to extend it
+ *   Interceptor myInterceptor = new EmptyInterceptor() {
+ *       @Override
+ *       public boolean onLoad(Object entity, Object id, Object[] state,
+ *                             String[] propertyNames, Type[] types) {
+ *           System.out.println("Loading entity: " + entity);
+ *           return false;
+ *       }
+ *   };
+ *   DelegatingInterceptor interceptor = new DelegatingInterceptor(myInterceptor);
+ *
+ *   // Pass null to fall back to EmptyInterceptor.INSTANCE
+ *   DelegatingInterceptor defaultInterceptor = new DelegatingInterceptor(null);
+ * }</pre>
+ *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy<a/>
  * @see Interceptor
  * @since 1.0.0
@@ -40,6 +57,12 @@ public class DelegatingInterceptor implements Interceptor, DelegatingWrapper {
 
     protected final Interceptor delegate;
 
+    /**
+     * Creates a new {@link DelegatingInterceptor} wrapping the given delegate.
+     * If {@code delegate} is {@code null}, {@link org.hibernate.internal.EmptyInterceptor#INSTANCE} is used.
+     *
+     * @param delegate the {@link Interceptor} to delegate to, or {@code null} for the empty interceptor
+     */
     public DelegatingInterceptor(@Nullable Interceptor delegate) {
         this.delegate = delegate == null ? INSTANCE : delegate;
     }
