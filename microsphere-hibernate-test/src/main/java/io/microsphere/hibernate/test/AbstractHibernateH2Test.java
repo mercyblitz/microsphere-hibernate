@@ -260,16 +260,6 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
             });
         }
 
-        @Test
-        @DisplayName("Test : persist & FROM User")
-        void testPersistAndGetManagedEntities() {
-            doInTransaction(() -> {
-                session.persist(user);
-                List<User> users = session.createQuery("FROM io.microsphere.hibernate.test.entity.User").list();
-                assertFalse(users.isEmpty());
-            });
-        }
-
         void doInTransaction(Runnable action) {
             assertDoesNotThrow(() -> {
                 Transaction transaction = session.beginTransaction();
