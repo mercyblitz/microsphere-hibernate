@@ -122,12 +122,11 @@ public interface EntityCallback {
      * @param lockMode           {@link LockMode}
      * @param isAssociationFetch
      * @param result
-     * @param readOnly
      * @param loadType
      * @see Session#find(Class, Object)
      * @see LoadEventListener
      */
-    default void onLoad(Object id, String entityClassName, Object entity, LockMode lockMode, boolean isAssociationFetch, Object result, Boolean readOnly, LoadType loadType) {
+    default void onLoad(Object id, String entityClassName, Object entity, LockMode lockMode, boolean isAssociationFetch, Object result, LoadType loadType) {
     }
 
     /**

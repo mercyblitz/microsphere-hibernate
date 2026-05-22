@@ -59,7 +59,7 @@ public class DelegatingInterceptor implements Interceptor, DelegatingWrapper {
 
     /**
      * Creates a new {@link DelegatingInterceptor} wrapping the given delegate.
-     * If {@code delegate} is {@code null}, {@link org.hibernate.internal.EmptyInterceptor#INSTANCE} is used.
+     * If {@code delegate} is {@code null}, {@link org.hibernate.EmptyInterceptor#INSTANCE} is used.
      *
      * @param delegate the {@link Interceptor} to delegate to, or {@code null} for the empty interceptor
      */

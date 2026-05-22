@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Maven Build
+name: Maven Build (Java 11+)
 
 permissions:
   contents: read
@@ -22,10 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '8' ]
+        java: [ '11' , '17' , '21' , '25' ]
         maven-profile-spring-cloud: [ 'spring-cloud-hoxton' , 'spring-cloud-2020' , 'spring-cloud-2021' ]
-        maven-hibernate: [ 'hibernate-5.6' , 'hibernate-5.5' , 'hibernate-5.4' , 'hibernate-5.3' ,
-                           'hibernate-5.2' , 'hibernate-5.1' , 'hibernate-5.0' ]
+        maven-hibernate: [ 'hibernate-5.6' , 'hibernate-5.5' , 'hibernate-5.4' , 'hibernate-5.3' ]
 
     steps:
       - name: Checkout Source
