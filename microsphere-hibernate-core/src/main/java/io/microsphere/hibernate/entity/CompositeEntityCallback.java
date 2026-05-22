@@ -61,8 +61,8 @@ public class CompositeEntityCallback implements EntityCallback {
     }
 
     @Override
-    public void onLoad(Object id, String entityClassName, Object entity, LockMode lockMode, boolean isAssociationFetch, Object result, Boolean readOnly, LoadEventListener.LoadType loadType) {
-        forEach(this.callbacks, callback -> callback.onLoad(id, entityClassName, entity, lockMode, isAssociationFetch, result, readOnly, loadType));
+    public void onLoad(Object id, String entityClassName, Object entity, LockMode lockMode, boolean isAssociationFetch, Object result, LoadEventListener.LoadType loadType) {
+        forEach(this.callbacks, callback -> callback.onLoad(id, entityClassName, entity, lockMode, isAssociationFetch, result, loadType));
     }
 
     @Override
