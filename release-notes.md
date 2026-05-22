@@ -59,4 +59,32 @@ Thank you for using version 0.1.0! Stay tuned for future updates.
 
 ---
 
-**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.0...0.1.1
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.0...0.1.1## v0.1.2
+
+# Release Notes - Version 0.1.2
+
+## Build and Workflow Enhancements
+- Added Maven CI workflow for Java 11+. [(#27a7d54)](https://github.com/mercyblitz/dev-1.x/commit/27a7d54)
+- Restricted CI for Java 8 and activated Hibernate profile in CI. [(#b5237a0, #7cf553b)](https://github.com/mercyblitz/dev-1.x/commits/dev-1.x)
+
+## Dependency Updates
+- Added `java9+` profile with `jaxb-api` to Maven POMs. [(#80a1278)](https://github.com/mercyblitz/dev-1.x/commit/80a1278)
+- Bumped Hibernate versions in the build. [(#7cf553b)](https://github.com/mercyblitz/dev-1.x/commit/7cf553b)
+
+## Test Improvements
+- Removed redundant `persist` and `FROM User` tests. [(#6cba8b5)](https://github.com/mercyblitz/dev-1.x/commit/6cba8b5)
+- Adjusted tests; removed `readOnly` from `onLoad` callback. [(#8b6a4f7)](https://github.com/mercyblitz/dev-1.x/commit/8b6a4f7)
+- Added Hibernate H2 tests. [(#b5237a0)](https://github.com/mercyblitz/dev-1.x/commit/b5237a0)
+
+## Documentation
+- Updated Javadoc to reference public `EmptyInterceptor`. [(#f439210)](https://github.com/mercyblitz/dev-1.x/commit/f439210)
+
+## Other Changes
+- Performed routine merges to keep branches up to date with upstream. [(#0c7c434, #313453f, #1cfceda)]  
+- Version bumped to `0.1.2` for patch release. [(#6b17122)](https://github.com/mercyblitz/dev-1.x/commit/6b17122)
+
+---
+
+**Full Changelog:** [0.1.1...0.1.2](https://github.com/mercyblitz/dev-1.x/compare/0.1.1...0.1.2)
+
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.1...0.1.2
