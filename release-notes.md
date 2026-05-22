@@ -38,4 +38,25 @@
 
 Thank you for using version 0.1.0! Stay tuned for future updates.
 
-**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/...0.1.0
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/...0.1.0## v0.1.1
+
+# Release Notes - Version 0.1.1
+
+## New Features
+- Added Hibernate JUnit extension for testing.  
+- Simplified static test setup using `javax.Entity`.  
+
+## Documentation
+- Updated README with branch names and version changes.  
+- Added documentation for Hibernate JUnit extension.  
+
+## Dependency Updates
+- Upgraded `microsphere-spring-cloud` to version 0.1.12.  
+
+## Build and Workflow Enhancements
+- Merged `release-1.x` changes into `dev-1.x`.  
+- Bumped version to next patch post 0.1.0 release.  
+
+---
+
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.0...0.1.1
