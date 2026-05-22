@@ -159,7 +159,7 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
     @Override
     public void onLoad(LoadEvent event, LoadType loadType) throws HibernateException {
         this.callback.onLoad(event.getEntityId(), event.getEntityClassName(), event.getInstanceToLoad(),
-                getLockMode(event.getLockOptions()), event.isAssociationFetch(), event.getResult(), event.getReadOnly(), loadType);
+                getLockMode(event.getLockOptions()), event.isAssociationFetch(), event.getResult(), loadType);
     }
 
     @Override
@@ -360,9 +360,8 @@ class EntityCallbackListener implements LoadEventListener, PersistEventListener,
         return false;
     }
 
-    @Override
     public boolean requiresPostCommitHandling(EntityPersister persister) {
-        return PostDeleteEventListener.super.requiresPostCommitHandling(persister);
+        return false;
     }
 
     /**

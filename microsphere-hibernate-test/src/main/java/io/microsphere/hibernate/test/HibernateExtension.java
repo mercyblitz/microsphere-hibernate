@@ -152,7 +152,7 @@ public class HibernateExtension implements BeforeAllCallback, BeforeEachCallback
         StatelessSession statelessSession = store.remove(STATELESS_SESSION_KEY, StatelessSession.class);
         Session session = store.remove(SESSION_KEY, Session.class);
 
-        if (statelessSession != null && statelessSession.isOpen()) {
+        if (statelessSession != null) {
             try {
                 statelessSession.close();
             } catch (Exception e) {
@@ -322,11 +322,11 @@ public class HibernateExtension implements BeforeAllCallback, BeforeEachCallback
     /**
      * Resolve the Hibernate component to inject for the given {@code type}.
      *
-     * @param type              the requested type
-     * @param configuration     the current Configuration (may be {@code null} for static context)
-     * @param sessionFactory    the current SessionFactory (may be {@code null} for static context)
-     * @param session           the current Session ({@code null} in static context)
-     * @param statelessSession  the current StatelessSession ({@code null} in static context)
+     * @param type             the requested type
+     * @param configuration    the current Configuration (may be {@code null} for static context)
+     * @param sessionFactory   the current SessionFactory (may be {@code null} for static context)
+     * @param session          the current Session ({@code null} in static context)
+     * @param statelessSession the current StatelessSession ({@code null} in static context)
      * @return the resolved component, or {@code null} if not applicable
      */
     private Object resolveValueForType(Class<?> type, Configuration configuration,

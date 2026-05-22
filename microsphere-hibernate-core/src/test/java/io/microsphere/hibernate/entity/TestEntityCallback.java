@@ -38,10 +38,10 @@ public class TestEntityCallback implements EntityCallback {
 
     @Override
     public void onLoad(Object id, String entityClassName, Object entity, LockMode lockMode, boolean isAssociationFetch,
-                       Object result, Boolean readOnly, LoadEventListener.LoadType loadType) {
-        logger.trace("onLoad - id : {}, entityClassName : {}, entity : {}, lockMode : {}, isAssociationFetch : {}, result : {}, readOnly : {}, loadType : {}",
-                id, entityClassName, entity, lockMode, isAssociationFetch, result, readOnly, loadType);
-        EntityCallback.super.onLoad(id, entityClassName, entity, lockMode, isAssociationFetch, result, readOnly, loadType);
+                       Object result, LoadEventListener.LoadType loadType) {
+        logger.trace("onLoad - id : {}, entityClassName : {}, entity : {}, lockMode : {}, isAssociationFetch : {}, result : {}, loadType : {}",
+                id, entityClassName, entity, lockMode, isAssociationFetch, result, loadType);
+        EntityCallback.super.onLoad(id, entityClassName, entity, lockMode, isAssociationFetch, result, loadType);
     }
 
     @Override

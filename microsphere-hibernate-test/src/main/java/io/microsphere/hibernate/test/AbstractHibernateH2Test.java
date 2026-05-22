@@ -185,24 +185,22 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
         }
 
         @Test
-        @DisplayName("Test : persist & remove")
-        void testPersistAndRemove() {
+        @DisplayName("Test : persist & delete")
+        void testPersistAndDelete() {
             doInTransaction(() -> {
                 session.persist(user);
 
                 UserProfile profile = user.getProfile();
                 user.setProfile(null);
-                session.remove(profile);
+                session.delete(profile);
                 session.flush();
 
                 List<Order> orders = user.getOrders();
-                orders.forEach(order -> {
-                    session.remove(order);
-                });
+                orders.forEach(order -> session.delete(order));
                 orders.clear();
                 session.flush();
 
-                session.remove(user);
+                session.delete(user);
             });
         }
 
@@ -221,15 +219,6 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
             doInTransaction(() -> {
                 session.persist(user);
                 session.flush();
-            });
-        }
-
-        @Test
-        @DisplayName("Test : persist & detach")
-        void testPersistAndDetach() {
-            doInAction(() -> {
-                session.persist(user);
-                session.detach(user);
             });
         }
 
@@ -266,7 +255,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
         void testPersistAndLoad() {
             doInTransaction(() -> {
                 session.persist(user);
-                User user1 = session.find(User.class, user.getId());
+                User user1 = session.load(User.class, user.getId());
                 assertEquals(user, user1);
             });
         }
@@ -276,7 +265,7 @@ public abstract class AbstractHibernateH2Test extends AbstractHibernateTest {
         void testPersistAndGetManagedEntities() {
             doInTransaction(() -> {
                 session.persist(user);
-                List<User> users = session.createQuery("FROM User", User.class).getResultList();
+                List<User> users = session.createQuery("FROM io.microsphere.hibernate.test.entity.User").list();
                 assertFalse(users.isEmpty());
             });
         }
