@@ -87,4 +87,20 @@ Thank you for using version 0.1.0! Stay tuned for future updates.
 
 **Full Changelog:** [0.1.1...0.1.2](https://github.com/mercyblitz/dev-1.x/compare/0.1.1...0.1.2)
 
-**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.1...0.1.2
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.1...0.1.2## v0.1.3
+
+# Release Notes - Version 0.1.3
+
+## Build and Workflow Enhancements
+- Merged `release-1.x` into `dev-1.x` for branch alignment. ([#18](https://github.com/mercyblitz/dev-1.x))
+- Bumped the version to the next patch after publishing 0.1.2.  
+
+## Documentation
+- Updated README with release information.  
+
+## Dependency Updates
+- Bumped parent project version for dependency alignment.  
+
+---
+
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.2...0.1.3
