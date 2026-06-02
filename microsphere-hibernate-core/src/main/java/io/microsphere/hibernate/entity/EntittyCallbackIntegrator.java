@@ -82,9 +82,9 @@ public class EntittyCallbackIntegrator implements Integrator {
      * Registers the {@link EntityCallbackListener} for all supported Hibernate event types
      * on the given {@link SessionFactoryImplementor}.
      *
-     * @param metadata           the Hibernate metadata
-     * @param sessionFactory     the session factory being built
-     * @param serviceRegistry    the session factory service registry
+     * @param metadata        the Hibernate metadata
+     * @param sessionFactory  the session factory being built
+     * @param serviceRegistry the session factory service registry
      */
     public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
         EventListenerRegistry eventListenerRegistry = serviceRegistry.getService(EventListenerRegistry.class);
