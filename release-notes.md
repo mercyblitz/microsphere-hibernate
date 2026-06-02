@@ -103,4 +103,28 @@ Thank you for using version 0.1.0! Stay tuned for future updates.
 
 ---
 
-**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.2...0.1.3
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.2...0.1.3## v0.1.4
+
+# Release Notes - Version 0.1.4
+
+## New Features
+- No new features in this release.
+
+## Bug Fixes
+- Removed duplicated line separators and trailing whitespace across the Java source codebase. ([#16](https://github.com/microsphere-projects/copilot/commit/d743607))
+
+## Documentation
+- Aligned Javadoc `@param` indentation for improved readability. ([21ee37d](https://github.com/microsphere-projects/copilot/commit/21ee37d))
+- Updated `README` to bump branch latest versions. ([9420a73](https://github.com/microsphere-projects/copilot/commit/9420a73))
+
+## Dependency Updates
+- Upgraded `microsphere-spring-cloud` to version `0.1.15`. ([b9f92d7](https://github.com/microsphere-projects/copilot/commit/b9f92d7))
+
+## Build and Workflow Enhancements
+- Merged `release-1.x` into `dev-1.x` for consistency. ([405eb00](https://github.com/microsphere-projects/copilot/commit/405eb00))
+- Bumped the patch version post-release for future development. ([1deaa12](https://github.com/microsphere-projects/copilot/commit/1deaa12))
+
+## Other Changes
+- Merged updates from the upstream branch `dev-1.x`. ([21795f0](https://github.com/microsphere-projects/copilot/commit/21795f0))
+
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.3...0.1.4
