@@ -81,7 +81,6 @@ class HibernateAnnotationTest {
         assertNull(statelessSession);
     }
 
-
     @Nested
     class FieldTest {
 
