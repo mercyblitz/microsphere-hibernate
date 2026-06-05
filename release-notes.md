@@ -127,4 +127,21 @@ Thank you for using version 0.1.0! Stay tuned for future updates.
 ## Other Changes
 - Merged updates from the upstream branch `dev-1.x`. ([21795f0](https://github.com/microsphere-projects/copilot/commit/21795f0))
 
-**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.3...0.1.4
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.3...0.1.4## v0.1.5
+
+# Release Notes - Version 0.1.5
+
+## Dependency Updates
+- Upgraded Microsphere Spring Cloud parent to `0.1.16`. [7b7a092](#)
+  
+## Documentation
+- Updated README to reflect branch versions `0.2.5` and `0.1.5`. [ad5dd6a](#)
+
+## Other Changes
+- Bumped version to `0.1.5` post-release of `0.1.4`. [14cef43](#)
+
+---
+
+*Thank you for using our project!*
+
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.4...0.1.5
