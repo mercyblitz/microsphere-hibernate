@@ -144,4 +144,26 @@ Thank you for using version 0.1.0! Stay tuned for future updates.
 
 *Thank you for using our project!*
 
-**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.4...0.1.5
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.4...0.1.5## v0.1.6
+
+# Release Notes - Version 0.1.6
+
+## 📚 Documentation
+- Updated **README** with branch version matrix for clarity. ([#234cfee](https://github.com/mercyblitz/microsphere-spring-cloud/commit/234cfee))
+
+## 📦 Dependency Updates
+- Bumped `microsphere-spring-cloud` to **v0.1.21** for improved compatibility and features. ([#af2b56a](https://github.com/mercyblitz/microsphere-spring-cloud/commit/af2b56a))
+
+## ⚙️ Build and Workflow Enhancements
+- Merged changes from `release-1.x` into `dev-1.x`. ([#d95aaae](https://github.com/mercyblitz/microsphere-spring-cloud/commit/d95aaae), [#95dff63](https://github.com/mercyblitz/microsphere-spring-cloud/commit/95dff63))
+- Updated project version to prepare for the next patch release. ([#0104700](https://github.com/mercyblitz/microsphere-spring-cloud/commit/0104700))
+
+## 🔗 Other Changes
+- Synced with upstream branch `dev-1.x`. ([#de42f68](https://github.com/mercyblitz/microsphere-spring-cloud/commit/de42f68))
+- Merged pull request `#34`. ([#c719b0b](https://github.com/mercyblitz/microsphere-spring-cloud/commit/c719b0b)) 
+
+---
+
+**Full Changelog**: [v0.1.5...v0.1.6](https://github.com/mercyblitz/microsphere-spring-cloud/compare/v0.1.5...v0.1.6)
+
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.5...0.1.6
