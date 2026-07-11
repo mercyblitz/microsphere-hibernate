@@ -166,4 +166,24 @@ Thank you for using version 0.1.0! Stay tuned for future updates.
 
 **Full Changelog**: [v0.1.5...v0.1.6](https://github.com/mercyblitz/microsphere-spring-cloud/compare/v0.1.5...v0.1.6)
 
-**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.5...0.1.6
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.5...0.1.6## v0.1.7
+
+# Release Notes - Version 0.1.7
+
+## Dependency Updates
+- Bumped Microsphere Spring Cloud to `0.1.23`. ([a676aed](#))
+- Fixed `hibernate-core` `groupId` in test `pom.xml`. ([27db810](#))
+- Fixed Maven dependency metadata in modules. ([438c880](#))
+
+## Documentation
+- Updated branch version numbers in `README`. ([f7ce605](#))
+
+## Build and Workflow Enhancements
+- Merged `release-1.x` into `dev-1.x`. ([0c4e765](#))
+- Bumped version to next patch after publishing `0.1.6`. ([0e70eab](#))
+
+---
+
+**Note:** For details on all changes, refer to the source control history.
+
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.6...0.1.7
