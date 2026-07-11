@@ -186,4 +186,22 @@ Thank you for using version 0.1.0! Stay tuned for future updates.
 
 **Note:** For details on all changes, refer to the source control history.
 
-**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.6...0.1.7
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.6...0.1.7## v0.1.8
+
+# Release Notes - Version 0.1.8
+
+## Dependency Updates
+- Bumped parent project to version `0.1.24` and made core dependency optional. ([a543a36](#))
+
+## Documentation
+- Updated README to reflect branch version updates. ([d8eacdb](#))
+
+## Build and Workflow Enhancements
+- Merged `release-1.x` into `dev-1.x` for branch alignment and maintenance. ([125f07d](#))
+- Bumped version to the next patch after publishing `0.1.7`. ([68f743a](#))
+
+---
+
+For detailed changes, refer to the [Full Changelog](#).
+
+**Full Changelog**: https://github.com/microsphere-projects/microsphere-hibernate/compare/0.1.7...0.1.8
